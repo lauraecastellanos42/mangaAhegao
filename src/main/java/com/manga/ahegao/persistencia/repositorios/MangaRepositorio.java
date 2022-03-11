@@ -24,6 +24,23 @@ public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
             "inner join author on author.id = author_manga.author_id\n" +
             "where author.id = ?",nativeQuery = true)
     public List<MangaEntity> findByAuthor(int idAuthor);
+
+    /**
+     * This function returns the manga with the most number of volumes in a given genre
+     *
+     * @param idGenre The id of the genre we want to find the manga with the most volumes.
+     * @return The manga with the most volumes.
+     */
+    @Query(value = "select max(manga.num_volumes) as numVolumenes,  manga.title as nombre,\n" +
+            "nA.japanese ,manga.synopsis, manga.start_date, manga.end_date\n" +
+            "from manga \n" +
+            "inner join manga_genre on manga_genre.manga_id = manga.id \n" +
+            "inner join genre on genre.id = manga_genre.genre_id\n" +
+            "left join alternative_title nA on nA.manga_id = manga.id\n" +
+            "where genre.id = ? \n" +
+            "group by genre.id",nativeQuery = true)
+        public List<Object[]> findMaxVolumSinseGenre(int idGenre);
+
     /* guia para escribir el jpaql:
     * select manga.*
         from manga
@@ -73,6 +90,7 @@ public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
      * @param startDate The start date of the manga
      * @param endDate The date that the manga ended on.
      * @return A List of MangaEntity objects
+     *
      */
     List<MangaEntity>findAllByStartDateGreaterThanEqualAndEndDateLessThanOrderByStartDate(Date startDate,Date endDate);
 
