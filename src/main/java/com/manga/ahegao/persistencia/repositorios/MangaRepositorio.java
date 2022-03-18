@@ -1,12 +1,17 @@
 package com.manga.ahegao.persistencia.repositorios;
 
+import com.manga.ahegao.dtos.IManga;
+import com.manga.ahegao.dtos.IMangaMean;
+import com.manga.ahegao.dtos.ISynopsis;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
@@ -94,4 +99,56 @@ public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
      */
     List<MangaEntity>findAllByStartDateGreaterThanEqualAndEndDateLessThanOrderByStartDate(Date startDate,Date endDate);
 
+    /**
+     * Proyección escalar nativo
+     */
+    @Query(value = "SELECT id, title, synopsis\n" +
+            "FROM manga.manga\n" +
+            "WHERE synopsis like %:synopsis%", nativeQuery = true)
+    List<Map<String, Object>> findBySynopsisNative(@Param("synopsis") String synopsis);
+
+    /**
+     * Proyección escalar JPAQL
+     */
+    @Query("SELECT m.id as id, m.title as title, m.synopsis as synopsis FROM MangaEntity m WHERE m.synopsis like %:synopsis%")
+    List<Map<String, Object>> findBySynopsisJpaql(@Param("synopsis") String synopsis);
+
+    /**
+     * Proyección cerrada nativo
+     * @param synopsis
+     * @return
+     */
+    @Query(value = "SELECT id, title, synopsis, start_date as startDate, end_date as endDate\n" +
+            "FROM manga.manga\n" +
+            "WHERE synopsis like %:synopsis%", nativeQuery = true)
+    List<ISynopsis> findBySynopsisINative(@Param("synopsis") String synopsis);
+
+    /**
+     * Proyección cerrada JPAQL
+     * @param synopsis
+     * @return
+     */
+    @Query("SELECT m.id as id, m.title as title, m.synopsis as synopsis, m.ranking as ranking, m.startDate as startDate, m.endDate as endDate " +
+            "FROM MangaEntity m WHERE m.synopsis like %:synopsis%")
+    List<ISynopsis> findBySynopsisIJpaql(@Param("synopsis") String synopsis);
+
+    /**
+     * Interfaces compuestas
+     * @param synopsis
+     * @return
+     */
+    //TODO Revisar por qué no funciona
+    @Query("SELECT m.title as title, at.japanese as japanese " +
+            "FROM MangaEntity m " +
+            "LEFT JOIN AlternativeTitleEntity at ON m.id = at.mangaId " +
+            "WHERE m.synopsis like %:synopsis%")
+    List<IManga> findCompBySynopsis(@Param("synopsis") String synopsis);
+
+    /**
+     * Proyecciones abiertas con method query
+     * @param chapters
+     * @return
+     */
+    //@Query(value = "SELECT m FROM MangaEntity m WHERE m.numChapters > :chapters")
+    List<IMangaMean> findAllByNumChaptersGreaterThan(int chapters);
 }

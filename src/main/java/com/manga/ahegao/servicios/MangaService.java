@@ -1,5 +1,8 @@
 package com.manga.ahegao.servicios;
 
+import com.manga.ahegao.dtos.IManga;
+import com.manga.ahegao.dtos.IMangaMean;
+import com.manga.ahegao.dtos.ISynopsis;
 import com.manga.ahegao.dtos.MangaDto;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
 import com.manga.ahegao.persistencia.repositorios.MangaRepositorio;
@@ -10,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MangaService {
@@ -49,5 +53,29 @@ public class MangaService {
         mangaDto.setStartDate((Date) arreglo[4]);
         mangaDto.setEndDate((Date) arreglo[5]);
         return mangaDto;
+    }
+
+    public List<Map<String, Object>> findBySynopsisNative(String synopsis) {
+        return mangaRep.findBySynopsisNative(synopsis);
+    }
+
+    public List<Map<String, Object>> findBySynopsisJpaql(String synopsis) {
+        return mangaRep.findBySynopsisJpaql(synopsis);
+    }
+
+    public List<ISynopsis> findBySynopsisINative(String synopsis) {
+        return mangaRep.findBySynopsisINative(synopsis);
+    }
+
+    public List<ISynopsis> findBySynopsisIJpaql(String synopsis) {
+        return mangaRep.findBySynopsisIJpaql(synopsis);
+    }
+
+    public List<IManga> findCompBySynopsis(String synopsis) {
+        return mangaRep.findCompBySynopsis(synopsis);
+    }
+
+    public List<IMangaMean> findByChapters(int chapters) {
+        return mangaRep.findAllByNumChaptersGreaterThan(chapters);
     }
 }
