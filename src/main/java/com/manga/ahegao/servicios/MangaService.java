@@ -4,6 +4,10 @@ import com.manga.ahegao.dtos.*;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
 import com.manga.ahegao.persistencia.repositorios.MangaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -80,7 +84,9 @@ public class MangaService {
         return mangaRep.findByGenre(genreId);
     }
 
-    public List<MangaInfoDto> findByGenreUri(Integer genreId) {
-        return mangaRep.findByGenreUri(genreId);
+    public Slice<MangaInfoDto> findByGenreUri(Integer genreId, Integer page, Integer items,
+                                              String sortDirection, String sortAttribute) {
+        PageRequest pageRequest = PageRequest.of(page, items, Sort.Direction.fromString(sortDirection), sortAttribute);
+        return mangaRep.findByGenreUri(genreId, pageRequest);
     }
 }

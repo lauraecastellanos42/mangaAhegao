@@ -5,6 +5,8 @@ import com.manga.ahegao.dtos.*;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
 import com.manga.ahegao.servicios.MangaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -85,8 +87,12 @@ public class MangaController {
         return mangaService.findByGenre(genreId);
     }
 
-    @GetMapping("findByGenreUri/{genreId}")
-    public List<MangaInfoDto> findByGenreUri(@PathVariable Integer genreId) {
-        return mangaService.findByGenreUri(genreId);
+    @GetMapping("findByGenreUri")
+    public Slice<MangaInfoDto> findByGenreUri(@RequestParam Integer genreId,
+                                              @RequestParam Integer page,
+                                              @RequestParam Integer items,
+                                              @RequestParam String sortDirection,
+                                              @RequestParam String sortAttribute) {
+        return mangaService.findByGenreUri(genreId, page, items, sortDirection, sortAttribute);
     }
 }

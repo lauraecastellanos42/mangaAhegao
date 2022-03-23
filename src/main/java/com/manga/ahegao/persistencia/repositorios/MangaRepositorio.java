@@ -5,8 +5,12 @@ import com.manga.ahegao.dtos.IMangaMean;
 import com.manga.ahegao.dtos.ISynopsis;
 import com.manga.ahegao.dtos.MangaInfoDto;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
+public interface MangaRepositorio extends PagingAndSortingRepository/*JpaRepository*/<MangaEntity,Integer>  {
 
 
     /**
@@ -171,11 +175,12 @@ public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
      * @param genreId
      * @return
      */
-    @Query("SELECT new com.manga.ahegao.dtos.MangaInfoDto(m.id, m.title, p.large) " +
+    @Query("SELECT new com.manga.ahegao.dtos.MangaInfoDto(m.id, m.title, p.large, m.ranking) " +
             "FROM MangaEntity m " +
             "LEFT JOIN PictureEntity p ON m.id = p.mangaId " +
             "JOIN MangaGenreEntity mg ON m.id = mg.mangaId " +
             "WHERE mg.genreId = :genreId " +
-            "AND m.statusId = 1")
-    List<MangaInfoDto> findByGenreUri(Integer genreId);
+            "AND m.statusId = 1 ")
+    //Page<MangaInfoDto> findByGenreUri(Integer genreId, Pageable pageable);
+    Slice<MangaInfoDto> findByGenreUri(Integer genreId, Pageable pageable);
 }
