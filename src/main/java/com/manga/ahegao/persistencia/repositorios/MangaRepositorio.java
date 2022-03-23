@@ -3,6 +3,7 @@ package com.manga.ahegao.persistencia.repositorios;
 import com.manga.ahegao.dtos.IManga;
 import com.manga.ahegao.dtos.IMangaMean;
 import com.manga.ahegao.dtos.ISynopsis;
+import com.manga.ahegao.dtos.MangaInfoDto;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -151,4 +152,30 @@ public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
      */
     //@Query(value = "SELECT m FROM MangaEntity m WHERE m.numChapters > :chapters")
     List<IMangaMean> findAllByNumChaptersGreaterThan(int chapters);
+
+    /**
+     * Proyecciones basadas en clases
+     * @param genreId
+     * @return
+     */
+    @Query("SELECT new com.manga.ahegao.dtos.MangaInfoDto(m.id, m.title, p.large) " +
+           "FROM MangaEntity m " +
+           "LEFT JOIN PictureEntity p ON m.id = p.mangaId " +
+           "JOIN MangaGenreEntity mg ON m.id = mg.mangaId " +
+           "WHERE mg.genreId = :genreId " +
+           "AND m.statusId = 1")
+    List<MangaInfoDto> findByGenre(Integer genreId);
+
+    /**
+     * Proyecciones basadas en clases
+     * @param genreId
+     * @return
+     */
+    @Query("SELECT new com.manga.ahegao.dtos.MangaInfoDto(m.id, m.title, p.large) " +
+            "FROM MangaEntity m " +
+            "LEFT JOIN PictureEntity p ON m.id = p.mangaId " +
+            "JOIN MangaGenreEntity mg ON m.id = mg.mangaId " +
+            "WHERE mg.genreId = :genreId " +
+            "AND m.statusId = 1")
+    List<MangaInfoDto> findByGenreUri(Integer genreId);
 }

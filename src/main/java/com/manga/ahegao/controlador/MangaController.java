@@ -1,10 +1,7 @@
 package com.manga.ahegao.controlador;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.manga.ahegao.dtos.IManga;
-import com.manga.ahegao.dtos.IMangaMean;
-import com.manga.ahegao.dtos.ISynopsis;
-import com.manga.ahegao.dtos.MangaDto;
+import com.manga.ahegao.dtos.*;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
 import com.manga.ahegao.servicios.MangaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +78,15 @@ public class MangaController {
     @GetMapping("findByChapters/{chapters}")
     public List<IMangaMean> findByChapters(@PathVariable int chapters) {
         return mangaService.findByChapters(chapters);
+    }
+
+    @GetMapping("findByGenreId/{genreId}")
+    public List<MangaInfoDto> findByGenre(@PathVariable Integer genreId) {
+        return mangaService.findByGenre(genreId);
+    }
+
+    @GetMapping("findByGenreUri/{genreId}")
+    public List<MangaInfoDto> findByGenreUri(@PathVariable Integer genreId) {
+        return mangaService.findByGenreUri(genreId);
     }
 }

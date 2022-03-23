@@ -1,9 +1,6 @@
 package com.manga.ahegao.servicios;
 
-import com.manga.ahegao.dtos.IManga;
-import com.manga.ahegao.dtos.IMangaMean;
-import com.manga.ahegao.dtos.ISynopsis;
-import com.manga.ahegao.dtos.MangaDto;
+import com.manga.ahegao.dtos.*;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
 import com.manga.ahegao.persistencia.repositorios.MangaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +74,13 @@ public class MangaService {
 
     public List<IMangaMean> findByChapters(int chapters) {
         return mangaRep.findAllByNumChaptersGreaterThan(chapters);
+    }
+
+    public List<MangaInfoDto> findByGenre(Integer genreId) {
+        return mangaRep.findByGenre(genreId);
+    }
+
+    public List<MangaInfoDto> findByGenreUri(Integer genreId) {
+        return mangaRep.findByGenreUri(genreId);
     }
 }
