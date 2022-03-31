@@ -25,7 +25,9 @@
 			<properties>
 				<activatedProperties>dev</activatedProperties>
 			</properties>
-
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>org.springframework.boot</groupId>
@@ -41,9 +43,6 @@
 			<properties>
 				<activatedProperties>cloud</activatedProperties>
 			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 		</profile>
 	</profiles>
 	<dependencies>
