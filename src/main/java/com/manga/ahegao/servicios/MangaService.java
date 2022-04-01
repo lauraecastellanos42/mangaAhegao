@@ -1,6 +1,7 @@
 package com.manga.ahegao.servicios;
 
 import com.manga.ahegao.dtos.*;
+import com.manga.ahegao.mapper.MangaMapper;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
 import com.manga.ahegao.persistencia.repositorios.MangaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,34 +15,38 @@ import java.util.Map;
 
 @Service
 public class MangaService {
-   @Autowired
+    @Autowired
     MangaRepositorio mangaRep;
+    @Autowired
+    MangaMapper mangaMapper;
 
-    public MangaEntity findById(){
-       return mangaRep.findById(12).orElse(null);
+    public MangaEntity findById() {
+        return mangaRep.findById(12).orElse(null);
     }
 
-    public List<MangaEntity> findByAuthor(int idAuthor){
-        return  mangaRep.findByAuthor(idAuthor);
+    public List<MangaEntity> findByAuthor(int idAuthor) {
+        return mangaRep.findByAuthor(idAuthor);
     }
 
-    public List<MangaEntity> findByGenre (int idGenre){
-        return  mangaRep.findByGender(idGenre);
+    public List<MangaEntity> findByGenre(int idGenre) {
+        return mangaRep.findByGender(idGenre);
     }
 
-    public List<MangaEntity>findAllByMeanIsGreaterThan(int mean){
-        return  mangaRep.findAllByMeanIsGreaterThan(mean);
+    public List<MangaEntity> findAllByMeanIsGreaterThan(int mean) {
+        return mangaRep.findAllByMeanIsGreaterThan(mean);
     }
-    public List<MangaEntity>getTopNumVolum(){
+
+    public List<MangaEntity> getTopNumVolum() {
         return mangaRep.findTop5ByOrderByNumVolumesDesc();
     }
-    public List<MangaEntity>getMangaBetweenDate(Date startDate,Date endDate) throws ParseException {
-        return mangaRep.findAllByStartDateGreaterThanEqualAndEndDateLessThanOrderByStartDate(startDate,endDate);
+
+    public List<MangaEntity> getMangaBetweenDate(Date startDate, Date endDate) throws ParseException {
+        return mangaRep.findAllByStartDateGreaterThanEqualAndEndDateLessThanOrderByStartDate(startDate, endDate);
     }
 
-    public MangaDto findMaxVolumSinseGenre(int idGenre){
-        List<Object[]>listObject = mangaRep.findMaxVolumSinseGenre(idGenre);
-        Object[] arreglo= listObject.get(0);
+    public MangaDto findMaxVolumSinseGenre(int idGenre) {
+        List<Object[]> listObject = mangaRep.findMaxVolumSinseGenre(idGenre);
+        Object[] arreglo = listObject.get(0);
         MangaDto mangaDto = new MangaDto();
         mangaDto.setNumVolumes((Integer) arreglo[0]);
         mangaDto.setTitle(arreglo[1].toString());
@@ -82,5 +87,25 @@ public class MangaService {
 
     public List<MangaInfoDto> findByGenreUri(Integer genreId) {
         return mangaRep.findByGenreUri(genreId);
+    }
+
+    //    public MangaEntity saveManga(MangaInputDto mangaInput){
+//        MangaEntity mangaEntity = new MangaEntity();
+//        mangaEntity.setTitle(mangaInput.getTitle());
+//        mangaEntity.setStartDate(mangaInput.getStartDate());
+//        mangaEntity.setSynopsis(mangaInput.getSynopsis());
+//        mangaEntity.setNumVolumes(mangaInput.getNumVolumes());
+//        mangaEntity.setNumChapters(mangaInput.getNumChapters());
+//        mangaEntity.setEndDate(mangaInput.getEndDate());
+//        mangaEntity.setStatusId(mangaInput.getStatusId());
+//        mangaEntity.setMediaTypeId(mangaInput.getMediaTypeId());
+//        mangaEntity.setNsfwId(mangaInput.getNsfwId());
+//        mangaRep.save(mangaEntity);
+//        return mangaEntity;
+//    }
+    public MangaEntity saveManga(MangaInputDto mangaInput) {
+        MangaEntity mangaEntity= mangaMapper.toEntity(mangaInput);
+        mangaRep.save(mangaEntity);
+        return mangaEntity;
     }
 }

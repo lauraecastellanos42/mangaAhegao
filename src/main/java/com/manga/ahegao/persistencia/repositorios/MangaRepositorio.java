@@ -178,4 +178,5 @@ public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
             "WHERE mg.genreId = :genreId " +
             "AND m.statusId = 1")
     List<MangaInfoDto> findByGenreUri(Integer genreId);
+
 }

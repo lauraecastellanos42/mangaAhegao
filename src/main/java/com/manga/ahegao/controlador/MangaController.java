@@ -89,4 +89,8 @@ public class MangaController {
     public List<MangaInfoDto> findByGenreUri(@PathVariable Integer genreId) {
         return mangaService.findByGenreUri(genreId);
     }
+    @PostMapping("saveManga")
+    public MangaEntity saveManga(@RequestBody MangaInputDto mangaInput){
+        return mangaService.saveManga(mangaInput);
+    }
 }
