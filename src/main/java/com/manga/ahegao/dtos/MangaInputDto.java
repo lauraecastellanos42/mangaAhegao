@@ -2,8 +2,9 @@ package com.manga.ahegao.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-
 import java.util.Date;
+import java.util.List;
+
 @Data
 public class MangaInputDto {
 
@@ -18,5 +19,6 @@ public class MangaInputDto {
     private Integer statusId;
     private Integer mediaTypeId;
     private Integer nsfwId;
+    private List<Integer> generos;
 
 }

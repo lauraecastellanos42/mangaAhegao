@@ -94,6 +94,11 @@
 			<artifactId>mapstruct-processor</artifactId>
 			<version>1.4.2.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.gavlyukovskiy</groupId>
+			<artifactId>datasource-proxy-spring-boot-starter</artifactId>
+			<version>1.8.0</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

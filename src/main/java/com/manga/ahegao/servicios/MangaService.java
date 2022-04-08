@@ -3,22 +3,32 @@ package com.manga.ahegao.servicios;
 import com.manga.ahegao.dtos.*;
 import com.manga.ahegao.mapper.MangaMapper;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
+import com.manga.ahegao.persistencia.repositorios.GenreRepositorio;
+import com.manga.ahegao.persistencia.repositorios.MangaGenreRepositorio;
 import com.manga.ahegao.persistencia.repositorios.MangaRepositorio;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class MangaService {
     @Autowired
     MangaRepositorio mangaRep;
     @Autowired
     MangaMapper mangaMapper;
+    @Autowired
+    MangaGenreRepositorio mangaGenreRepositorio;
+    @Autowired
+    GenreRepositorio genreRepositorio;
+    @Autowired
+    MangaGenreService mangaGenreService;
 
     public MangaEntity findById() {
         return mangaRep.findById(12).orElse(null);
@@ -103,9 +113,12 @@ public class MangaService {
 //        mangaRep.save(mangaEntity);
 //        return mangaEntity;
 //    }
+
+    @Transactional(rollbackFor = Exception.class, noRollbackFor = {RuntimeException.class, JpaSystemException.class})
     public MangaEntity saveManga(MangaInputDto mangaInput) {
         MangaEntity mangaEntity= mangaMapper.toEntity(mangaInput);
         mangaRep.save(mangaEntity);
+        mangaGenreService.asociarMangeyGenero(mangaEntity,mangaInput.getGeneros());
         return mangaEntity;
     }
 }

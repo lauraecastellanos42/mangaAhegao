@@ -1,23 +1,19 @@
 package com.manga.ahegao.persistencia.entidades;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Objects;
+
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MangaGenreEntityPK implements Serializable {
-    @Column(name = "manga_id")
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer mangaId;
-    @Column(name = "genre_id")
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer genreId;
-
-
 }
