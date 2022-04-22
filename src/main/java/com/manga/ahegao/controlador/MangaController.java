@@ -93,4 +93,14 @@ public class MangaController {
     public MangaEntity saveManga(@RequestBody MangaInputDto mangaInput){
         return mangaService.saveManga(mangaInput);
     }
+
+    @GetMapping("finalizeManga/{id}")
+    public MangaEntity finalizeManga(@PathVariable int id) {
+        return mangaService.finalizeManga(id);
+    }
+
+    @GetMapping("recuperarMangaHoy/{id}")
+    public List<MangaEntity> recuperarMangaHoy(@PathVariable int id) {
+        return mangaService.recuperarMangaHoy(id);
+    }
 }

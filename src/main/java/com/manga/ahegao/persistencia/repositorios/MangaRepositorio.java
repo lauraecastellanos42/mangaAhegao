@@ -6,6 +6,7 @@ import com.manga.ahegao.dtos.ISynopsis;
 import com.manga.ahegao.dtos.MangaInfoDto;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -179,4 +180,18 @@ public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
             "AND m.statusId = 1")
     List<MangaInfoDto> findByGenreUri(Integer genreId);
 
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE MangaEntity me set me.statusId=1 where me.id=:id")
+    int updateState(int id);
+
+    @Query(value = "SELECT *\n" +
+            "FROM manga.manga\n" +
+            "WHERE date(end_date) = date(SYSDATE())", nativeQuery = true)
+    List<MangaEntity> mangaAcabaHoy();
+
+    @Modifying
+    @Query(value = "UPDATE manga.manga\n" +
+            "SET manga.num_list_users = manga.num_list_users + 1\n" +
+            "WHERE date(end_date) = date(SYSDATE())", nativeQuery = true)
+    int UpdateHoy();
 }

@@ -1,6 +1,7 @@
 package com.manga.ahegao.persistencia.entidades;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name = "manga",    schema = "manga",catalog = "manga")
+//@DynamicUpdate
 public class MangaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

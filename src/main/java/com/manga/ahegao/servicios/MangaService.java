@@ -3,6 +3,8 @@ package com.manga.ahegao.servicios;
 import com.manga.ahegao.dtos.*;
 import com.manga.ahegao.mapper.MangaMapper;
 import com.manga.ahegao.persistencia.entidades.MangaEntity;
+import com.manga.ahegao.persistencia.entidades.MangaGenreEntity;
+import com.manga.ahegao.persistencia.entidades.MangaGenreEntityPK;
 import com.manga.ahegao.persistencia.repositorios.GenreRepositorio;
 import com.manga.ahegao.persistencia.repositorios.MangaGenreRepositorio;
 import com.manga.ahegao.persistencia.repositorios.MangaRepositorio;
@@ -10,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.util.Date;
@@ -120,5 +123,22 @@ public class MangaService {
         mangaRep.save(mangaEntity);
         mangaGenreService.asociarMangeyGenero(mangaEntity,mangaInput.getGeneros());
         return mangaEntity;
+    }
+
+    @Transactional
+    public MangaEntity finalizeManga(int id){
+        MangaEntity mangaEntity = mangaRep.findById(id).get();
+        mangaRep.updateState(id);
+        mangaEntity = mangaRep.findById(id).get();
+        return mangaEntity;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<MangaEntity> recuperarMangaHoy(int id){
+        MangaEntity mangaEntity = mangaRep.findById(id).get();
+        mangaEntity.setEndDate(new Date());
+        mangaRep.save(mangaEntity);
+        System.out.println(mangaRep.UpdateHoy());
+        return mangaRep.mangaAcabaHoy();
     }
 }
