@@ -133,7 +133,7 @@ public class MangaService {
         return mangaEntity;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public List<MangaEntity> recuperarMangaHoy(int id){
         MangaEntity mangaEntity = mangaRep.findById(id).get();
         mangaEntity.setEndDate(new Date());

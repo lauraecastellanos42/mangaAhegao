@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -189,7 +190,7 @@ public interface MangaRepositorio extends JpaRepository <MangaEntity,Integer>  {
             "WHERE date(end_date) = date(SYSDATE())", nativeQuery = true)
     List<MangaEntity> mangaAcabaHoy();
 
-    @Modifying
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = "UPDATE manga.manga\n" +
             "SET manga.num_list_users = manga.num_list_users + 1\n" +
             "WHERE date(end_date) = date(SYSDATE())", nativeQuery = true)
